@@ -1,0 +1,63 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Email Template Form</h1>
+
+  <div mat-dialog-content>
+    <div style="display: flex;">
+      <div style="width: 70%;">
+
+        <div>
+          <h4 *ngIf="errorMessage">
+            <mat-error>{{ errorMessage }}</mat-error>
+          </h4>
+
+          <form [formGroup]="form">
+            <!-- SLA Name -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Template name</mat-label>
+              <input matInput formControlName="templateName" type="text" required>
+            </mat-form-field>
+
+            <!-- Subject -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Subject</mat-label>
+              <input matInput formControlName="subject" type="text" required>
+            </mat-form-field>
+
+            <!-- Body -->
+            <!-- <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Body</mat-label>
+              <textarea matInput formControlName="body" rows="4" required></textarea>
+            </mat-form-field> -->
+            <div class="NgxEditor__Wrapper">
+              <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
+              <ngx-editor [editor]="editor" formControlName="body" [placeholder]="'Type here...'"></ngx-editor>
+            </div>
+          </form>
+
+          <div mat-dialog-actions class="flex-container">
+            <div class="right mt-10">
+              <button mat-raised-button class="mr-5"  (click)="onCancel()">Cancel</button>
+              <button mat-raised-button  [disabled]="form.invalid || isLoading" color="primary" (click)="onSave()">
+                {{isLoading ? 'Saving ...' : 'Save'}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 30%;">
+        <div style="padding-left: 20px;">
+          <h4>Email Placeholders</h4>
+          Placeholders are variables that user can insert in the body field. The use of square brakets with inner text
+          is mandatory to define a placehlder.
+          The placeholders variables will be evaluated during the email process
+
+          <!-- <mat-chip-set > -->
+            <button mat-stroked-button color="primary" class="mr-5 mt-10"  *ngFor="let p of placeholderList">{{p}}</button>
+          <!-- </mat-chip-set> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

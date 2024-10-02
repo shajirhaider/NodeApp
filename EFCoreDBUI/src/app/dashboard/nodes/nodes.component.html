@@ -1,0 +1,37 @@
+<h4
+  style="font-size: 1.5rem; "
+  class=""
+>{{pageTitle}}  
+<button
+    mat-mini-fab
+    color="secondary"
+    (click)="loadList()"
+  ><mat-icon>refresh</mat-icon>
+</button>
+</h4>
+@if (remoteDataLoaded) {
+<app-table-component
+  [columns]="columns"
+  [exportName]="exportName"
+  [tableId]="tableId"
+  [remoteDataLoaded]="remoteDataLoaded"
+  [remoteData]="remoteData"
+  [showAddButton]="false"
+  [showActions]="['edit']"
+  (onAddEvent)="onAddEvent()"
+  (onEditEvent)="onEdit($event)"
+></app-table-component>
+
+}@else {
+
+<app-table-component
+  [columns]="columns"
+  [exportName]="exportName"
+  [tableId]="tableId"
+  [remoteDataLoaded]="remoteDataLoaded"
+  [remoteData]="remoteData"
+  [showAddButton]="false"
+  (onAddEvent)="onAddEvent()"
+  (onEditEvent)="onEdit($event)"
+></app-table-component>
+}

@@ -1,0 +1,13 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>{{title}}</h1>
+  <div mat-dialog-content> {{message}}</div>
+  <div
+    mat-dialog-actions
+    class="flex-container"
+  >
+    <div class="right mt-10">
+      <button mat-raised-button class="mr-5" color="warn" (click)="onConfirm()">Yes</button>
+      <button mat-raised-button (click)="onCancel()" >Cancel</button>
+    </div>
+  </div>
+</div>

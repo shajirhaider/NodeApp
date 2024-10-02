@@ -1,0 +1,335 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Node Form</h1>
+
+  <div class="" style="display: flex;">
+    <div class="w-50">
+      <div mat-dialog-content>
+        <h4 *ngIf="errorMessage">
+          <mat-error>{{ errorMessage }}</mat-error>
+        </h4>
+    
+        <form [formGroup]="form">
+          <!-- Name -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Alias -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Alias</mat-label>
+            <input
+              matInput
+              formControlName="alias"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Aggregate -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Aggregate</mat-label>
+            <input
+              matInput
+              formControlName="aggregate"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Player -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Player</mat-label>
+            <input
+              matInput
+              formControlName="player"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Type -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Type</mat-label>
+            <input
+              matInput
+              formControlName="type"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Subtype -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Subtype</mat-label>
+            <input
+              matInput
+              formControlName="subtype"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Task Type -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Task Type</mat-label>
+            <mat-select formControlName="taskType">
+              <mat-option
+                *ngFor="let option of taskType"
+                [value]="option"
+              >{{ option }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+    
+          <!-- Email Template -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label (click)="preview = 'email'">Email Template</mat-label>
+            <mat-select formControlName="emailTemplateId">
+              <mat-option
+                *ngFor="let template of emailTemplates"
+                [value]="template.emailTemplateId"
+              >{{ template.emailTemplateName }}</mat-option>
+            </mat-select>
+            <mat-hint class="curser link" align="end" (click)="preview = 'email'; getPreview()"> Preview</mat-hint>
+          </mat-form-field>
+    
+          <!-- SLA -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>SLA</mat-label>
+            <mat-select formControlName="slaId">
+              <mat-option
+                *ngFor="let sla of slas"
+                [value]="sla.slaId"
+              >{{ sla.slaName }}</mat-option>
+            </mat-select>
+            <mat-hint class="curser link" align="end" (click)="preview = 'sla'; getPreview()"> Preview</mat-hint>
+          </mat-form-field>
+    
+          <!-- Shifting -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Shifting</mat-label>
+            <input
+              matInput
+              formControlName="shifting"
+              type="text"
+            >
+          </mat-form-field>
+    
+          <!-- Duration -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label>Process Duration</mat-label>
+            <input
+              matInput
+              formControlName="processDuration"
+              type="number"
+            >
+          </mat-form-field>
+    
+          <!-- Contact -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label (click)="preview = 'contact'">Contact</mat-label>
+            <mat-select formControlName="contactId">
+              <mat-option
+                *ngFor="let contact of filteredContacts"
+                [value]="contact.contactId"
+              >{{ contact.fullName }}</mat-option>
+            </mat-select>
+            <mat-hint class="curser link" align="end" (click)="preview = 'contact'; getPreview()"> Preview</mat-hint>
+          </mat-form-field>
+    
+          <!-- Contact CC -->
+          <mat-form-field
+            appearance="outline"
+            class="mb-10 full-width"
+          >
+            <mat-label (click)="preview = 'contactCC'">Contact CC</mat-label>
+            <mat-select formControlName="contactCCId">
+              <mat-option
+                *ngFor="let contactCC of filteredContactsCC"
+                [value]="contactCC.contactId"
+              >{{ contactCC.fullName }}</mat-option>
+            </mat-select>
+            <mat-hint class="curser link" align="end" (click)="preview = 'contactCC'; getPreview()"> Preview</mat-hint>
+          </mat-form-field>
+    
+          <!-- Loader -->
+
+        </form>
+      </div>
+      <div
+        mat-dialog-actions
+        class="flex-container"
+      >
+        <div class="right">
+          <button
+            mat-raised-button class="mr-5"
+            (click)="onCancel()"
+          >Cancel</button>
+          <button
+            mat-raised-button
+            [disabled]="form.invalid || isLoading"
+            color="primary"
+            (click)="onSave()"
+          >  {{isLoading ? 'Saving ...' : 'Save'}}
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <div class="border w-50" style="margin-left: 10px; padding: 5px;">
+      <div class="prev-header">Preview Pane</div>
+      @if(prevEmail){
+        <div class="card-header" >  Email Template </div>
+        <div class="card-body">
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">Name: </div>
+            <div class="w-60">{{prevEmail.emailTemplateName}}</div>
+         </div> 
+         <div class="mb-5 flex-container">
+           <div class="prev-label w-40"> Subject: </div>
+           <div class="w-60">{{prevEmail.emailTemplateSubject}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40">Body: </div>
+          <div class="w-60">
+            <div [innerHTML]="prevEmail.emailTemplateBody"></div>
+            <!-- {{prevEmail.emailTemplateBody}} -->
+          </div>
+        </div> 
+        </div>
+      }
+
+      @if(prevSla){
+        <div class="card-header" >  SLA </div>
+        <div class="card-body">
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">SLA Name: </div>
+            <div class="w-60">{{prevSla.slaName}}</div>
+         </div> 
+         <div class="mb-5 flex-container">
+           <div class="prev-label w-40">Frequency Transaction: </div>
+           <div class="w-60">{{prevSla.slaFrequencyTransaction}}</div>
+        </div> 
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">Frequency Position: </div>
+            <div class="w-60">{{prevSla.slaFrequencyPosition}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40">Anniversary: </div>
+          <div class="w-60">{{prevSla.slaAnniversary ? 'Yes' : 'No'}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40">Exclude Weekend: </div>
+          <div class="w-60">{{prevSla.slaExcludeWeekends ? 'Yes' : 'No'}}</div>
+      </div> 
+
+        </div>
+      }
+
+      @if(prevContact){
+        <div class="card-header" >  Contact </div>
+        <div class="card-body">
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">First Name: </div>
+            <div class="w-60">{{prevContact.firstName}}</div>
+         </div> 
+         <div class="mb-5 flex-container">
+           <div class="prev-label w-40"> Last Name: </div>
+           <div class="w-60">{{prevContact.lastName}}</div>
+        </div> 
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">Email: </div>
+            <div class="w-60">{{prevContact.email}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40">Address: </div>
+          <div class="w-60">{{prevContact.address}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> City: </div>
+          <div class="w-60">{{prevContact.city}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> Business Phone: </div>
+          <div class="w-60">{{prevContact.businessPhone}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> Mobile Phone: </div>
+          <div class="w-60">{{prevContact.mobilePhone}}</div>
+        </div> 
+
+        </div>
+      }
+      
+      @if(prevContactCC){
+        <div class="card-header" >  Contact CC </div>
+        <div class="card-body">
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">First Name: </div>
+            <div class="w-60">{{prevContactCC.firstName}}</div>
+         </div> 
+         <div class="mb-5 flex-container">
+           <div class="prev-label w-40"> Last Name: </div>
+           <div class="w-60">{{prevContactCC.lastName}}</div>
+        </div> 
+          <div class="mb-5 flex-container">
+            <div class="prev-label w-40">Email: </div>
+            <div class="w-60">{{prevContactCC.email}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40">Address: </div>
+          <div class="w-60">{{prevContactCC.address}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> City: </div>
+          <div class="w-60">{{prevContactCC.city}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> Business Phone: </div>
+          <div class="w-60">{{prevContactCC.businessPhone}}</div>
+        </div> 
+        <div class="mb-5 flex-container">
+          <div class="prev-label w-40"> Mobile Phone: </div>
+          <div class="w-60">{{prevContactCC.mobilePhone}}</div>
+        </div> 
+
+        </div>
+      }
+    </div>
+  </div>
+</div>
